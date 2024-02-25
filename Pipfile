@@ -1,0 +1,3 @@
+[scripts]
+main = 'python main.py "~/Pictures/Google Photos/802 Rollins/" "~/Pictures/Google Photos Final/"'
+echospam = "echo I am really a very silly example"
