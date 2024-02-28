@@ -2,7 +2,7 @@ import os
 import glob
 import shutil
 import constants
-from write_metadata import write_metadata
+from process_file import process_file
 from get_possible_json_filenames import get_possible_json_filenames
 from check_for_duplicates import check_for_duplicates
 
@@ -44,7 +44,7 @@ def process_files_in_directory(input_directory, output_directory, error_director
                     copied_file = copy_and_remap_extension(file, output_directory, mapToExtension)
                     
                     if not has_duplicates:
-                        write_metadata(json_file, copied_file)
+                        process_file(json_file, copied_file)
                     break
             else:
                 copy_and_remap_extension(file, error_directory, mapToExtension)
