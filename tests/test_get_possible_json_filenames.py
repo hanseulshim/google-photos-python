@@ -26,9 +26,18 @@ class TestGetPossibleJsonFilenames(unittest.TestCase):
         expected_output = "./photos/00100lrPORTRAIT_00100_BURST20191119215144544_C.json"
         self.assertIn(expected_output, get_possible_json_filenames(filename))
         
+        filename = "./photos/tH7opDHO7-vROHgrrh-COg20190306-17138-i6afjk.mp4"
+        expected_output = "./photos/tH7opDHO7-vROHgrrh-COg20190306-17138-i6afjk.mp.json"
+        self.assertIn(expected_output, get_possible_json_filenames(filename))
+        
         # Test when filename has a .heic extension
         filename = "./photos/IMG_2720.heic"
         expected_output = "./photos/IMG_2720.heic.json"
+        self.assertIn(expected_output, get_possible_json_filenames(filename))
+        
+        #Test for edited image files
+        filename = "./photos/IMG_2720-edited.JPG"
+        expected_output = "./photos/IMG_2720.JPG.json"
         self.assertIn(expected_output, get_possible_json_filenames(filename))
 
 if __name__ == '__main__':
