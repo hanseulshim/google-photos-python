@@ -7,7 +7,7 @@ def process_file(json_file, filename):
     file_extension = os.path.splitext(filename)[1]
     file_path = os.path.dirname(filename)
     
-    new_filename = get_new_file_name(json_file, filename)
+    new_filename = get_new_file_name(json_file, filename, file_extension)
     new_filename_full = os.path.join(file_path, new_filename + file_extension)
     os.rename(filename, new_filename_full)
     write_metadata(json_file, new_filename_full)
@@ -19,7 +19,7 @@ def process_file(json_file, filename):
             os.rename(mp4_filename, new_mp4_filename)
             write_metadata(json_file, new_mp4_filename)
             
-def get_new_file_name(json_file, filename):
+def get_new_file_name(json_file, filename, file_extension):
     """
     Generates a new file name based on the photo taken time from the metadata of a JSON file.
 
@@ -41,13 +41,13 @@ def get_new_file_name(json_file, filename):
         dt = datetime.datetime.fromtimestamp(photo_taken_time)
         # Rename the file using the photo_taken_time
         new_file_name = dt.strftime(constants.FILE_FORMAT)
-        new_file_path = os.path.join(os.path.dirname(filename), new_file_name)
+        new_file_path = os.path.join(os.path.dirname(filename), new_file_name + file_extension)
 
         # Check if a file with the new name already exists
         counter = 1
         while os.path.exists(new_file_path):
             new_file_name = dt.strftime(constants.FILE_FORMAT) + f'_{counter:03}'
-            new_file_path = os.path.join(os.path.dirname(filename), new_file_name)
+            new_file_path = os.path.join(os.path.dirname(filename), new_file_name + file_extension)
             counter += 1
 
         return new_file_name
