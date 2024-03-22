@@ -9,11 +9,18 @@ from check_for_duplicates import check_for_duplicates
 # from rename_processed_files import rename_processed_files
 
 
-def process_files_in_directory(input_directory, output_directory, error_directory):
+def process_files_in_directory(input_directory, output_directory, error_directory, final_directory):
     """
-        Lists all files of supported types in directory path
-        :param input_directory: path of the directory
-        :return:
+    Process files in the input directory and perform various operations based on the file type.
+
+    Args:
+        input_directory (str): The path to the input directory.
+        output_directory (str): The path to the output directory.
+        error_directory (str): The path to the error directory.
+        final_directory (str): The path to the final directory.
+
+    Returns:
+        None
     """
 
     total_files = 0
@@ -25,10 +32,10 @@ def process_files_in_directory(input_directory, output_directory, error_director
         # grab all files with the extension (case insensitive)
         files = glob.glob(os.path.join(input_directory, '*.' + extension), recursive=True)
         files.extend(glob.glob(os.path.join(input_directory, '*.' + extension.upper()),recursive=True))
-        
         files_length = len(files)
+        
         print(f"Files with .{extension} extension: ", files_length)
-        total_files += files_length
+        total_files += files_length        
         for file in files:
             # for mp4 files, check if there are any corresponding image files. if there are then it means that we need to process the metadata with the image file instead of the mp4 file
             has_duplicates = check_for_duplicates(file) if extension == 'mp4' else False
@@ -49,7 +56,33 @@ def process_files_in_directory(input_directory, output_directory, error_director
             else:
                 copy_and_remap_extension(file, error_directory, mapToExtension)
                 print('No corresponding JSON file found: ', file, possible_json_files)
-    print('Total files: ', total_files)
+    print('Total files in input directory: ', total_files)
+    output_files = glob.glob(os.path.join(output_directory, '*'))
+    out_files_length = len(output_files)
+    print('Total files in output directory: ', out_files_length)
+    if total_files == out_files_length:
+        move_all_files(output_directory, final_directory)
+    else:
+        print('Mismatch in total files in input and output directories. Please check the output directory.')
+
+def move_all_files(src_directory, dst_directory):
+    """
+    Move all files from src_directory to dst_directory.
+    :param src_directory: The source directory
+    :param dst_directory: The destination directory
+    """
+    # Check if destination directory exists, if not, create it
+    if not os.path.exists(dst_directory):
+        os.makedirs(dst_directory)
+
+    # Get all files in the source directory
+    files = os.listdir(src_directory)
+
+    # Move all files
+    for file in files:
+        src_file_path = os.path.join(src_directory, file)
+        if os.path.isfile(src_file_path):
+            shutil.move(src_file_path, dst_directory)
 
 def copy_and_remap_extension(file, directory, new_extension):
     """

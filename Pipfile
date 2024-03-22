@@ -1,3 +1,4 @@
 [scripts]
-main = 'python main.py "~/Pictures/Google Photos/802 Rollins/" "~/Pictures/Google Photos Final/"'
+main = 'python main.py "~/Pictures/Google Photos/Photos from 2015/" "~/Pictures/Google Photos Final/" "~/Pictures/Google Photos Final/2015"'
 echospam = "echo I am really a very silly example"
+test = 'python ./tests/test_get_possible_json_filenames.py'
